@@ -3,14 +3,17 @@
 "use strict";
 
 function countSubstring(s, target) {
+    return s.split(target).length - 1;
 }
 
 // Save obj in localStorage
 function saveInLocalStorage(name, obj) {
+    window.localStorage.setItem(name, JSON.stringify(obj));
 }
 
 // Return value of name in local storage
 function getFromLocalStorage(name) {
+    return JSON.parse(window.localStorage.getItem(name));
 }
 
 // This function has an unbounded this. When it is called, the this will be bound to some object
@@ -19,11 +22,19 @@ function getFromLocalStorage(name) {
 // addMissProperty tests the object bound to its "this" for the key of "obj" (e.g., location)
 // If the bound object doesn't have that key then the key and its value is added to the bound object.
 function addMissingProperty(obj) {
+    for (const key in obj) {
+        if (Object.hasOwnProperty.call(obj, key) && this[key] == undefined) {
+            this[key] = obj[key];
+        }
+    }
 }
 
 // Constructor function which creates object {name:name, country:country, creationData:...}
 // Where creationDate is the time that the object is created.
 function Person(name, country) {
+    this.name = name;
+    this.country = country;
+    this.creationDate = new Date();
 }
 
 
@@ -31,15 +42,22 @@ function Person(name, country) {
 // {name:some name, country: some country}
 // This function creates a Map using the "students" parameter and sets the value of each student
 // in it to zero. This will be the number of classes that the student has missed.
-// The function incrementAbscences (see next) can be called to increment the number of absences.
+
 function register(students) {
+    let record = new Map();
+    for (const student of students) {
+        record.set(student, 0);
+    }
+    return record;
 }
 
+// The function incrementAbscences (see next) can be called to increment the number of absences.
 // Parameters:
 // course is a Map mapping student objects to an integer which is the number of days missed
 // student is an object that can be used as a key to course.
 // This function increments the number of days missed for the student.
 function incrementAbsences(course, student) {
+    course.set(student, course.get(student) + 1);
 }
 
 
